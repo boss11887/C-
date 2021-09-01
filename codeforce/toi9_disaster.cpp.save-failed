@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+queue<int> q;
+queue<int> ans;
+int ll;
+//vector<int> vec[30];
+int deg[30];
+int ar[30][30];
+
+int main(){
+int n;
+scanf("%d",&n);
+for(int a=1;a<=n;a++){
+    char f,s,cc[10];
+    scanf("%s",cc);
+    sscanf(cc,"%c%c",&f,&s);
+    //printf("%c%c\n",f,s);
+    f-='A'-1;
+    s-='A'-1;
+    ar[f][s]=1;
+    ar[s][f]=1;
+    deg[f]++;
+    deg[s]++;
+    //printf("%d %d\n",f,s);
+}
+bool jue=0;
+bool even=true;
+for(int a=1;a<=26;a++){
+    if(deg[a]%2==1){
+        even=false;
+        if(jue==0){
+        q.push(a);
+        ans.push(a);
+        jue=1;
+        }else{
+        ll=a;
+        }
+    }
+}
+if(even){
+    for(int a=1;a<=26;a++){
+    if(deg[a]>0){
+        q.push(a);
+        ans.push(a);
+        ll=a;
+        break;
+    }
+    }
+}
+while(!q.empty()){
+    int now=q.front();
+    q.pop();
+    for(int a=1;a<=26;a++){
+        if(deg[a]>1 && a!=now && ar[now][a]==1){
+            deg[a]--;
+            deg[now]--;
+            ar[a][now]=0;
+            ar[now][a]=0;
+            q.push(a);
+            ans.push(a);
+            break;
+        }else if(deg[a]==1 && a!=now && ar[now][a]==1 && ans.size()==n-1){
+            ans.push(a);
+            break;
+        }
+    }
+}
+while(!ans.empty()){
+    printf("%c ",ans.front()+'A'-1);
+    ans.pop();
+}
+    printf("%c",ll+'A'-1);
+return 0;}
